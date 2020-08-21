@@ -19,6 +19,10 @@ public abstract class Entity {
     protected boolean massLocked;
     protected boolean radiusLocked;
     protected boolean densityLocked;
+
+    public int count = 0;
+    public boolean slowTime = false;
+
     public Entity(Handler handler, double x, double y, double velx, double vely, double accx, double accy,double radius, double mass, double density,
                   boolean gravity, boolean massLocked, boolean radiusLocked, boolean densityLocked) {
         this.handler = handler;
@@ -43,6 +47,9 @@ public abstract class Entity {
         }
         updateVelocity();
         updatePosition();
+    }
+
+    public void generalUpdate() {
         updateMass();
         updateRadius();
         updateDensity();
@@ -146,4 +153,17 @@ public abstract class Entity {
     public boolean getGravity() {
         return gravity;
     }
+
+    public void setSlowTime() {
+        slowTime = true;
+    }
+
+    public void resetSlowTime() {
+        slowTime = false;
+    }
+
+    public void resetCount() {
+        count = 0;
+    }
+
 }

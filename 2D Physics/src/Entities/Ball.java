@@ -9,6 +9,7 @@ public class Ball extends Entity {
 
     private Random ran = new Random();
     private int R, G, B;
+    private boolean spacebar = false;
 
     public Ball(Handler handler, double x, double y, double velx, double vely, double accx, double accy, double radius, double mass, double density,
                 boolean gravity, boolean massLocked, boolean radiusLocked, boolean densityLocked) {
@@ -20,8 +21,16 @@ public class Ball extends Entity {
     }
 
     public void tick() {
-        move();
+        count++;
+        if (slowTime && count == 5) {
+            move();
+            count = 0;
+        }
+        else if (!slowTime) {
+            move();
+        }
         selectObject();
+    System.out.println(count);
     }
 
     public void render(Graphics g) {
@@ -46,7 +55,7 @@ public class Ball extends Entity {
                 handler.getMouseManager().getMouseX() <= x + radius*2 &&
                 handler.getMouseManager().getMouseY() >= y &&
                 handler.getMouseManager().getMouseY() <= y + radius*2 &&
-                handler.getMouseManager().isRightPressed()) {
+                handler.getMouseManager().rightPressed) {
             select = true;
             handler.getMouseManager().clearRightPressed();
         }

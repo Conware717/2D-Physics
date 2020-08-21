@@ -25,6 +25,8 @@ public class Game extends Canvas implements Runnable {
     private Handler handler;
     private BufferStrategy bs;
 
+    private boolean spacebarCheck = false;
+
     public Game() {
 
         display = new Display(width, height, "Game");
@@ -108,6 +110,19 @@ public class Game extends Canvas implements Runnable {
             handler.getKeyManager().resetChar();
         }
 
+        if (handler.getKeyManager().isChar() == ' ' && !spacebarCheck) {
+            handler.getEntityManager().resetCount();
+            handler.getEntityManager().time = true;
+            spacebarCheck = true;
+            handler.getKeyManager().resetChar();
+        }
+
+        if (handler.getKeyManager().isChar() == ' ' && spacebarCheck) {
+            handler.getEntityManager().time = false;
+            spacebarCheck = false;
+            handler.getKeyManager().resetChar();
+        }
+
         if (handler.getMouseManager().isLeftPressed() && !handler.getEntityManager().isSelect()) {
             ballGen();
             handler.getMouseManager().clearLeftPressed();
@@ -145,12 +160,12 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void ballGen() {
-        entityManager.addEntity(new Ball(handler, handler.getMouseManager().getMouseX() - 20, handler.getMouseManager().getMouseY() - 20, 0, 0, 0, 0, 20, 20, 1,
+        entityManager.addEntity(new Ball(handler, handler.getMouseManager().getMouseX() - 20, handler.getMouseManager().getMouseY() - 20, 3, 0, 0, 0, 20, 20, 1,
                 false, false, false, true));
     }
 
     public void randomBallGen() {
-        for (int i = 0; i < 330; i++) {
+        for (int i = 0; i < 100; i++) {
             double x, y, radius, velx, vely, accx, accy, mass, density;
             Random ran = new Random();
             x = ran.nextInt(width);

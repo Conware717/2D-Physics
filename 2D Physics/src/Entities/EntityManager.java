@@ -12,6 +12,7 @@ public class EntityManager {
     public boolean[] select;
     boolean active;
     private Handler handler;
+    public boolean time = false;
 
     public EntityManager(Handler handler) {
         entities = new ArrayList<>();
@@ -36,6 +37,12 @@ public class EntityManager {
             if (!e.getSelect()) {
                 select[i] = false;
                 selectedBall = null;
+            }
+            if (time) {
+                entities.get(i).setSlowTime();
+            }
+            if (!time) {
+                entities.get(i).resetSlowTime();
             }
         }
     }
@@ -69,5 +76,11 @@ public class EntityManager {
             }
         }
         return active = false;
+    }
+
+    public void resetCount () {
+        for (int i = 0; i < entities.size(); i++) {
+            entities.get(i).resetCount();
+        }
     }
 }
