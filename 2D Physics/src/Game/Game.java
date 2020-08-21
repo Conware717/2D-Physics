@@ -32,7 +32,7 @@ public class Game extends Canvas implements Runnable {
         display = new Display(width, height, "Game");
 
         mouseManager = new MouseManager();
-        keyManager = new KeyManager();
+        keyManager = new KeyManager(); 
         entityManager = new EntityManager(handler);
         buttonManager = new ButtonManager(handler);
 
