@@ -10,14 +10,17 @@ public abstract class Entity {
 
     private float G = 1;
 
-    protected double x, y, radius;
-
+    protected double x, y;
     protected double velx, vely;
     protected double accx, accy;
-    protected double mass;
+    protected double mass, radius, density;
     protected boolean gravity;
-    protected boolean select = false;
-    public Entity(Handler handler, double x, double y, double velx, double vely, double accx, double accy, double radius, double mass, boolean gravity) {
+    protected boolean select;
+    protected boolean massLocked;
+    protected boolean radiusLocked;
+    protected boolean densityLocked;
+    public Entity(Handler handler, double x, double y, double velx, double vely, double accx, double accy,double radius, double mass, double density,
+                  boolean gravity, boolean massLocked, boolean radiusLocked, boolean densityLocked) {
         this.handler = handler;
         this.x = x;
         this.y = y;
@@ -26,8 +29,12 @@ public abstract class Entity {
         this.accx = accx;
         this.accy = accy;
         this.radius = radius;
+        this.density = density;
         this.mass = mass;
         this.gravity = gravity;
+        this.massLocked = massLocked;
+        this.radiusLocked = radiusLocked;
+        this.densityLocked = densityLocked;
     }
 
     public void move() {
@@ -36,6 +43,9 @@ public abstract class Entity {
         }
         updateVelocity();
         updatePosition();
+        updateMass();
+        updateRadius();
+        updateDensity();
     }
 
     public void updatePosition() {
@@ -63,6 +73,24 @@ public abstract class Entity {
         }
     }
 
+    public void updateMass() {
+        if (!massLocked) {
+            mass = (density * (Math.PI * (Math.pow(radius, 2))));
+        }
+    }
+
+    public void updateRadius() {
+        if (!radiusLocked) {
+            radius = Math.sqrt(mass / (Math.PI * density));
+        }
+    }
+
+    public void updateDensity() {
+        if (!densityLocked) {
+            density = mass / (Math.PI / Math.pow(radius, 2));
+        }
+    }
+
     public double calcDistance(double x1, double y1, double radius1, double x2, double y2, double radius2) {
         return Math.sqrt((x1 + radius1 - (x2 + radius2))*(x1 + radius1 - (x2 + radius2)) + (y1 + radius1 - (y2 + radius2))*(y1 + radius1 - (y2 + radius2)));
     }
@@ -78,12 +106,14 @@ public abstract class Entity {
     public abstract void render(Graphics g);
 
     public boolean getSelect() {
-        return select;
+            return select;
     }
 
-    public double getMass () {
+    public double getMass() {
         return mass;
     }
+
+    public double getDensity() {return density;}
 
     public double getX() {
         return x;
@@ -113,7 +143,7 @@ public abstract class Entity {
         return accy;
     }
 
-    public boolean isGravity() {
+    public boolean getGravity() {
         return gravity;
     }
 }

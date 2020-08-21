@@ -1,22 +1,21 @@
 package Entities;
 
-import Entities.Ball;
-import Game.Button;
 import Game.Handler;
 
 import java.awt.*;
-import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
 public class EntityManager {
 
-    private boolean select = false;
     private Entity selectedBall;
     public ArrayList<Entity> entities;
+    public boolean[] select;
+    boolean active;
     private Handler handler;
 
     public EntityManager(Handler handler) {
-        entities = new ArrayList<Entity>();
+        entities = new ArrayList<>();
+        select = new boolean[100];
         this.handler = handler;
     }
 
@@ -31,11 +30,11 @@ public class EntityManager {
             }
             e.tick();
             if (e.getSelect()) {
-                select = true;
+                select[i] = true;
                 selectedBall = e;
             }
             if (!e.getSelect()) {
-                select = false;
+                select[i] = false;
                 selectedBall = null;
             }
         }
@@ -47,12 +46,12 @@ public class EntityManager {
         }
     }
 
-    public boolean isSelect() {
+    public boolean[] selectArray() {
         return select;
     }
 
-    public Entity getSelectedBall() {
-        return selectedBall;
+    public Entity getSelectedBall(int i) {
+        return entities.get(i);
     }
 
     public void addEntity(Entity e) {
@@ -61,5 +60,14 @@ public class EntityManager {
 
     public void clearEntity() {
         entities.clear();
+    }
+
+    public boolean isSelect() {
+        for (int i = 0; i < select.length; i++) {
+            if (select[i]) {
+                return active = true;
+            }
+        }
+        return active = false;
     }
 }

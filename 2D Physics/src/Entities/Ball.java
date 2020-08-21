@@ -10,8 +10,9 @@ public class Ball extends Entity {
     private Random ran = new Random();
     private int R, G, B;
 
-    public Ball(Handler handler, double x, double y, double velx, double vely, double accx, double accy, double radius, double mass, boolean gravity) {
-        super(handler, x, y, velx, vely, accx, accy, radius, mass, gravity);
+    public Ball(Handler handler, double x, double y, double velx, double vely, double accx, double accy, double radius, double mass, double density,
+                boolean gravity, boolean massLocked, boolean radiusLocked, boolean densityLocked) {
+        super(handler, x, y, velx, vely, accx, accy, radius, mass, density, gravity, massLocked, radiusLocked, densityLocked);
 
         R = ran.nextInt(256);
         G = ran.nextInt(256);
@@ -20,27 +21,10 @@ public class Ball extends Entity {
 
     public void tick() {
         move();
+        selectObject();
     }
 
     public void render(Graphics g) {
-
-        if (handler.getMouseManager().getMouseX() >= x &&
-            handler.getMouseManager().getMouseX() <= x + radius*2 &&
-            handler.getMouseManager().getMouseY() >= y &&
-            handler.getMouseManager().getMouseY() <= y + radius*2 &&
-            handler.getMouseManager().isRightPressed()) {
-            select = true;
-            handler.getMouseManager().clearRightPressed();
-        }
-
-        if (select && ((handler.getMouseManager().isRightPressed()) &&
-            (handler.getMouseManager().getMouseX() <= x ||
-            handler.getMouseManager().getMouseX() >= x + radius*2 ||
-            handler.getMouseManager().getMouseY() <= y ||
-            handler.getMouseManager().getMouseY() >= y + radius*2))) {
-            select = false;
-            handler.getMouseManager().clearRightPressed();
-        }
 
         if (handler.getMouseManager().getMouseX() >= x &&
             handler.getMouseManager().getMouseX() <= x + radius*2 &&
@@ -54,5 +38,26 @@ public class Ball extends Entity {
         g.setColor(new Color(R, G, B));
         g.fillOval((int) x, (int) y, (int) radius*2, (int) radius*2);
 
+    }
+
+    public void selectObject() {
+
+        if (handler.getMouseManager().getMouseX() >= x &&
+                handler.getMouseManager().getMouseX() <= x + radius*2 &&
+                handler.getMouseManager().getMouseY() >= y &&
+                handler.getMouseManager().getMouseY() <= y + radius*2 &&
+                handler.getMouseManager().isRightPressed()) {
+            select = true;
+            handler.getMouseManager().clearRightPressed();
+        }
+
+        if (select && ((handler.getMouseManager().isRightPressed()) &&
+                (handler.getMouseManager().getMouseX() <= x ||
+                        handler.getMouseManager().getMouseX() >= x + radius*2 ||
+                        handler.getMouseManager().getMouseY() <= y ||
+                        handler.getMouseManager().getMouseY() >= y + radius*2))) {
+            select = false;
+            handler.getMouseManager().clearRightPressed();
+        }
     }
 }
