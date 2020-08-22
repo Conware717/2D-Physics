@@ -1,10 +1,10 @@
 package Game;
 
-import Buttons.Button;
-import Buttons.ButtonManager;
 import Entities.Ball;
 import Entities.EntityManager;
+import TextField.BootlegTextField;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
@@ -13,6 +13,9 @@ public class Game extends Canvas implements Runnable {
 
     public static final int width = 1280, height = width/16*9;
 
+    private BootlegTextField[] bootlegTextField;
+    private int bootlegTextFieldLength = 8;
+
     private Thread thread;
     private boolean running = false;
     private Display display;
@@ -20,7 +23,6 @@ public class Game extends Canvas implements Runnable {
     private MouseManager mouseManager;
     private EntityManager entityManager;
     private KeyManager keyManager;
-    private ButtonManager buttonManager;
 
     private Handler handler;
     private BufferStrategy bs;
@@ -34,7 +36,8 @@ public class Game extends Canvas implements Runnable {
         mouseManager = new MouseManager();
         keyManager = new KeyManager(); 
         entityManager = new EntityManager(handler);
-        buttonManager = new ButtonManager(handler);
+
+        bootlegTextField = new BootlegTextField[bootlegTextFieldLength];
 
         handler = new Handler(this);
 
@@ -46,6 +49,9 @@ public class Game extends Canvas implements Runnable {
         display.getCanvas().addMouseMotionListener(mouseManager);
 
         start();
+
+        entityManager.addEntity(new Ball(handler, 300, 300, 0, 0, 0, 0, 20, 2000, 1,
+                true, false, false, true));
     }
 
     public synchronized void start() {
@@ -148,10 +154,19 @@ public class Game extends Canvas implements Runnable {
         entityManager.render(g);
         for (int i = 0; i < entityManager.selectArray().length; i++) {
             if (entityManager.select[i]) {
-                buttonManager.addButton(new Button(handler, 20, 20, "Mass", entityManager.getSelectedBall(i).getMass(), 20));
-                buttonManager.addButton(new Button(handler, 20, 60, "Radius", entityManager.getSelectedBall(i).getRadius(), 20));
-                buttonManager.addButton(new Button(handler, 20, 100, "Density", entityManager.getSelectedBall(i).getDensity(), 20));
-                buttonManager.render(g);
+                bootlegTextField[0] = new BootlegTextField(handler, 100,1);
+                bootlegTextField[1] = new BootlegTextField(handler, 100,2);
+                bootlegTextField[2] = new BootlegTextField(handler, 100,3);
+                bootlegTextField[3] = new BootlegTextField(handler, 100,4);
+                bootlegTextField[4] = new BootlegTextField(handler, 100,5);
+                bootlegTextField[5] = new BootlegTextField(handler, 100,6);
+                bootlegTextField[6] = new BootlegTextField(handler, 100,7);
+                bootlegTextField[7] = new BootlegTextField(handler, 100,8);
+
+                for (int j = 0; j < bootlegTextFieldLength; j++) {
+                    bootlegTextField[j].tick();
+                    bootlegTextField[j].render(g);
+                }
             }
         }
 
@@ -160,8 +175,8 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void ballGen() {
-        entityManager.addEntity(new Ball(handler, handler.getMouseManager().getMouseX() - 20, handler.getMouseManager().getMouseY() - 20, 3, 0, 0, 0, 20, 20, 1,
-                false, false, false, true));
+        entityManager.addEntity(new Ball(handler, handler.getMouseManager().getMouseX() - 20, handler.getMouseManager().getMouseY() - 20, 4, 0, 0, 0, 20, 20, 1,
+                true, false, false, true));
     }
 
     public void randomBallGen() {

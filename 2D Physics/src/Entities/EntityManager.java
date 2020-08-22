@@ -14,6 +14,8 @@ public class EntityManager {
     private Handler handler;
     public boolean time = false;
 
+    public int i;
+
     public EntityManager(Handler handler) {
         entities = new ArrayList<>();
         select = new boolean[100];
@@ -22,6 +24,7 @@ public class EntityManager {
 
     public void tick() {
         for (int i = 0; i < entities.size(); i++) {
+
             Entity e = entities.get(i);
             if (e.x > 4000 || e.x < -1000) {
                 entities.remove(e);

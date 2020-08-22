@@ -22,6 +22,9 @@ public class Ball extends Entity {
 
     public void tick() {
         count++;
+        if (count == 100) {
+            count = 0;
+        }
         if (slowTime && count == 5) {
             move();
             count = 0;
@@ -30,7 +33,6 @@ public class Ball extends Entity {
             move();
         }
         selectObject();
-    System.out.println(count);
     }
 
     public void render(Graphics g) {
@@ -60,7 +62,7 @@ public class Ball extends Entity {
             handler.getMouseManager().clearRightPressed();
         }
 
-        if (select && ((handler.getMouseManager().isRightPressed()) &&
+        if (select && (handler.getMouseManager().isRightPressed() &&
                 (handler.getMouseManager().getMouseX() <= x ||
                         handler.getMouseManager().getMouseX() >= x + radius*2 ||
                         handler.getMouseManager().getMouseY() <= y ||
